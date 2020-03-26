@@ -5,31 +5,72 @@ my_client = pymongo.MongoClient("mongodb://" + host + ":27017/")
 my_db = my_client["camic"]
 heat_col = my_db['heatmap']
 mark_col = my_db['mark']
+analysis_col = my_db['analysis']
 
 
-def get_data(query, collection):
-    my_set = set()
-    for x in collection.find(query, {
-        "provenance.analysis.execution_id": 1,
+# SEGMENTATIONS - COMPUTER, AND HUMAN.
+def computer(quad):
+    # analysis. submit_date, type, computation, execution_id
+    my_list = []
+    exec_list = []  # weed out the duplicates
+
+    # QUERY ON IMAGE
+    query = {
+        "provenance.image.slide": str(quad['nid']),
+        "provenance.image.imageid": quad['imageid'],
+        "provenance.image.study": quad['studyid'],
+        "provenance.image.subject": quad['subjectid']
+    }
+
+    for x in analysis_col.find(query, {
+        "analysis": 1,
         "_id": 0
     }):
-        my_set.add(x['provenance']['analysis']['execution_id'])
-    return my_set
+        execid = x['provenance']['analysis']['execution_id']
+        if execid not in exec_list:
+            exec_list.append(execid)
+            my_list.append(x)
+
+    return my_list
 
 
-def segmentations(nid, imageid, studyid, subjectid):
-    return get_data({
-        "provenance.image.slide": str(nid),
-        "provenance.image.imageid": imageid,
-        "provenance.image.study": studyid,
-        "provenance.image.subject": subjectid
-    }, mark_col)
+def human(quad):
+    # creator, created_date, provenance.analysis source, computation, execution_id
+    my_list = []
+    exec_list = []  # weed out the duplicates
+
+    query = {
+        "provenance.image.slide": str(quad['nid']),  # "50830"
+        "provenance.analysis.source": "human"
+    }
+
+    for x in mark_col.find(query, {"_id": 0, "geometries": 0}):
+        execid = x['provenance']['analysis']['execution_id']
+        if execid not in exec_list:
+            exec_list.append(execid)
+            my_list.append(x)
+
+    return my_list
 
 
-def heatmaps(nid, imageid, studyid, subjectid):
-    return get_data({
-        "provenance.image.slide": str(nid),
-        "provenance.image.subject_id": subjectid,
-        "provenance.image.case_id": imageid,
-        "provenance.analysis.study_id": studyid
-    }, heat_col)
+# HEATMAP
+def heat(quad):
+    # source, execution_id, computation (no date)
+    my_list = []
+    exec_list = []  # weed out the duplicates
+
+    query = {
+        "provenance.image.slide": str(quad['nid']),
+        "provenance.image.case_id": quad['imageid'],
+        "provenance.image.subject_id": quad['subjectid'],
+        "provenance.analysis.study_id": quad['studyid'],
+        "provenance.analysis.source": "computation"
+    }
+
+    for x in heat_col.find(query, {"_id": 0, "data": 0}):
+        execid = x['provenance']['analysis']['execution_id']
+        if execid not in exec_list:
+            exec_list.append(execid)
+            my_list.append(x)
+
+    return my_list

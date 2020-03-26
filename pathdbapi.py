@@ -67,21 +67,20 @@ class MyApi:
         return lookup_table
 
     def get_featuremaps(self, slide_id):
-        """
-        Returns list of Featuremap Execution IDs
-        """
-        my_set = set()
+        my_list = []
 
         response = self.get_data('/maps/' + str(slide_id) + '?_format=json')
 
         if len(response) > 0:
             for r in response:
-                exec = r['execution_id']
-                if len(exec) > 0:
-                    my_set.add(exec[0]['value'])
-                else:
-                    map_type = r['field_map_type']
-                    if len(map_type) > 0:
-                        my_set.add(map_type[0]['value'])
+                my_list.append(r)
+                # print('featuremap id', r['nid'])
+                # exec = r['execution_id']
+                # if len(exec) > 0:
+                #     my_set.add(exec[0]['value'])
+                # else:
+                #     map_type = r['field_map_type']
+                #     if len(map_type) > 0:
+                #         my_set.add(map_type[0]['value'])
 
-        return my_set
+        return my_list
