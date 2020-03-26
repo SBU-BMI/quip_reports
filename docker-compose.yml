@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  reports:
+    build:
+      context: .
+    image: quip_reports
+    container_name: quip-reports
+    volumes:
+      - /data/reports:/data/reports
+    networks:
+      - quip_distro_default
+
+networks:
+  quip_distro_default:
+   name: quip_distro_default
