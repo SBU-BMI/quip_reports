@@ -18,7 +18,7 @@ docker exec quip-reports images username password "collection name"
 
 2. **Print annotations**
 
-Prints list of images and their associated annotations, for a given collection.  Output columns: Collection, Study ID, Subject ID, Image ID, Segmentation Exec ID, Heatmap Exec ID, Featuremap ID.
+Prints list of images and their associated annotations, for a given collection.  Output columns: Collection, Study ID, Subject ID, Image ID, Analysis type, Execution ID, Creator, Date.
 
 <!-- For all collections, pass "all" instead of "collection name". -->
 <!-- python3.6 annotations.py username password "collection name" -->
