@@ -1,5 +1,4 @@
 # quip_reports
-For SEER VTR Pilot
 
 ## Usage
 
