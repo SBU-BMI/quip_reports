@@ -7,10 +7,18 @@ import time
 from mongoapi import *
 from pathdbapi import *
 
+def get_date(ii, xx):
+    created_date = ""
+    if "created_date" in ii:
+        created_date = ii['created_date']
+    else:
+        if "submit_date" in xx['provenance']:
+            created_date = xx['submit_date']
 
-def peep():
-    # This gonna be for the number to people conversion
-    print()
+    # 2020-03-03T16:25:13.299Z
+    print('created_date', created_date)
+    return created_date
+
 
 
 def featuremap(my_writer, my_img, none_row):
@@ -64,6 +72,7 @@ def mark(my_writer, my_img, none_row, current_type):
         for i in my_list:
             # print(i)
             X = i['provenance']['analysis']
+            created_date = get_date(i, X)
             if "computation" in X:
                 current_type = X['computation'].capitalize()
 
