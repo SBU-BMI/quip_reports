@@ -22,8 +22,8 @@ def computer(quad):
         "provenance.image.subject": quad['subjectid']
     }
 
-    for x in analysis_col.find(query, {
-        "analysis": 1,
+    for x in mark_col.find(query, {
+        "geometries": 0,
         "_id": 0
     }):
         execid = x['provenance']['analysis']['execution_id']
@@ -63,8 +63,7 @@ def heat(quad):
         "provenance.image.slide": str(quad['nid']),
         "provenance.image.case_id": quad['imageid'],
         "provenance.image.subject_id": quad['subjectid'],
-        "provenance.analysis.study_id": quad['studyid'],
-        "provenance.analysis.source": "computation"
+        "provenance.analysis.study_id": quad['studyid']
     }
 
     for x in heat_col.find(query, {"_id": 0, "data": 0}):
