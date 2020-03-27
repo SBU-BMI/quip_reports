@@ -16,11 +16,10 @@ def get_date(ii, xx):
     if "created_date" in ii:
         created_date = ii['created_date']
     else:
-        if "submit_date" in xx['provenance']:
+        if "submit_date" in xx:
             created_date = xx['submit_date']
 
     # 2020-03-03T16:25:13.299Z
-    print('created_date', created_date)
     return created_date
 
 
