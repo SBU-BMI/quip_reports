@@ -7,6 +7,10 @@ import time
 from mongoapi import *
 from pathdbapi import *
 
+
+usr_details = {}
+
+
 def get_date(ii, xx):
     created_date = ""
     if "created_date" in ii:
@@ -19,6 +23,24 @@ def get_date(ii, xx):
     print('created_date', created_date)
     return created_date
 
+
+def get_peep(i, X):
+    creator_str = ""
+    if "creator" in i:
+        creator_num = i['creator']
+        if creator_num.isnumeric():
+            p = "/user/" + creator_num + "?_format=json"
+            if creator_num in usr_details.keys():
+                creator_str = usr_details[creator_num]
+            else:
+                rr = api.get_data(p)
+                if len(rr) > 0:
+                    usr_details[creator_num] = rr['name'][0]['value']
+                    creator_str = rr['name'][0]['value']
+    else:
+        creator_str = X['source']
+
+    return creator_str.capitalize()
 
 
 def featuremap(my_writer, my_img, none_row):
@@ -72,22 +94,11 @@ def mark(my_writer, my_img, none_row, current_type):
         for i in my_list:
             # print(i)
             X = i['provenance']['analysis']
+            creator = get_peep(i, X)
             created_date = get_date(i, X)
+
             if "computation" in X:
                 current_type = X['computation'].capitalize()
-
-            if "creator" in i:
-                creator = i['creator']
-            else:
-                creator = X['source']
-
-            if "created_date" in i:
-                created_date = i['created_date']
-            else:
-                if "submit_date" in X:
-                    created_date = X['submit_date']
-                else:
-                    created_date = ""
 
             my_writer.writerow(
                 [collection_name, my_img['studyid'], my_img['subjectid'], my_img['imageid'], current_type,
