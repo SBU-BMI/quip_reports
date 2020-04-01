@@ -7,7 +7,6 @@ import time
 from mongoapi import *
 from pathdbapi import *
 
-
 usr_details = {}
 
 
@@ -36,8 +35,10 @@ def get_peep(i, X):
                 if len(rr) > 0:
                     usr_details[creator_num] = rr['name'][0]['value']
                     creator_str = rr['name'][0]['value']
-    else:
+    elif "source" in i:
         creator_str = X['source']
+    else:
+        creator_str = "Computer"
 
     return creator_str.capitalize()
 
