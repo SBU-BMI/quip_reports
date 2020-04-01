@@ -92,7 +92,10 @@ def mark(my_writer, my_img, none_row, current_type):
         # creator, created_date, provenance.analysis source, computation, execution_id
         for i in my_list:
             # print(i)
-            X = i['provenance']['analysis']
+            if "Human" in current_type:
+                X = i['provenance']['analysis']
+            else:
+                X = i['analysis']
             creator = get_peep(i, X)
             created_date = get_date(i, X)
 
