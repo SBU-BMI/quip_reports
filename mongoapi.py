@@ -16,10 +16,10 @@ def computer(quad):
 
     # QUERY ON IMAGE
     query = {
-        "provenance.image.slide": str(quad['nid']),
-        "provenance.image.imageid": quad['imageid'],
-        "provenance.image.study": quad['studyid'],
-        "provenance.image.subject": quad['subjectid']
+        "image.slide": str(quad['nid']),
+        "image.imageid": quad['imageid'],
+        "image.study": quad['studyid'],
+        "image.subject": quad['subjectid']
     }
 
     # for x in mark_col.find(query, {
@@ -30,7 +30,7 @@ def computer(quad):
         "analysis": 1,
         "_id": 0
     }):
-        execid = x['provenance']['analysis']['execution_id']
+        execid = x['analysis']['execution_id']
         if execid not in exec_list:
             exec_list.append(execid)
             my_list.append(x)
