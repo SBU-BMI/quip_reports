@@ -22,8 +22,12 @@ def computer(quad):
         "provenance.image.subject": quad['subjectid']
     }
 
-    for x in mark_col.find(query, {
-        "geometries": 0,
+    # for x in mark_col.find(query, {
+    #     "geometries": 0,
+    #     "_id": 0
+    # }):
+    for x in analysis_col.find(query, {
+        "analysis": 1,
         "_id": 0
     }):
         execid = x['provenance']['analysis']['execution_id']
