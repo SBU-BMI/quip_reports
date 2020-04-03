@@ -56,8 +56,11 @@ def featuremap(my_writer, my_img, none_row):
                 # Compensating for database
                 execution_id = i['field_map_type'][0]['value']
 
-            if len(i['executed_by']) > 0:
-                executed_by = i['executed_by'][0]['value']
+            if 'executed_by' in i:
+                if len(i['executed_by']) > 0:
+                    executed_by = i['executed_by'][0]['value']
+                else:
+                    executed_by = ""
             else:
                 executed_by = ""
 
