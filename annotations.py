@@ -55,11 +55,15 @@ def featuremap(my_writer, my_img, none_row):
             else:
                 # Compensating for database
                 execution_id = i['field_map_type'][0]['value']
-            # TODO: Read the actual map for the execution id and executed by
-            # i['field_map'][0]['url']
+
+            if len(i['executed_by']) > 0:
+                executed_by = i['executed_by'][0]['value']
+            else:
+                executed_by = ""
+
             my_writer.writerow(
                 [collection_name, my_img['studyid'], my_img['subjectid'], my_img['imageid'], current_type, execution_id,
-                 '', created])
+                 executed_by, created])
     else:
         none_row[len(none_row) - 2] = none_row
         my_writer.writerow(none_row)
