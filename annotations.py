@@ -6,6 +6,7 @@ import time
 
 from mongoapi import *
 from pathdbapi import *
+from combine_data import *
 
 usr_details = {}
 
@@ -68,7 +69,7 @@ def featuremap(my_writer, my_img, none_row):
                 [collection_name, my_img['studyid'], my_img['subjectid'], my_img['imageid'], current_type, execution_id,
                  executed_by, created])
     else:
-        none_row[len(none_row) - 2] = none_row
+        none_row[len(none_row) - 2] = current_type
         my_writer.writerow(none_row)
 
 
@@ -158,7 +159,9 @@ if len(collection_name) == 0:
 images_url = '/listofimages/' + str(collection_id) + '?_format=json'
 name = re.sub('\W+', '', collection_name).lower()
 
-with open(out_dir + 'annotations_' + name + '_' + stamp + '.csv', mode='w') as csv_file:
+file_name_multirow = 'annotations_' + name + '_' + stamp + '.csv';
+file_name_singlerow = 'single_row_' + file_name_multirow;
+with open(out_dir + file_name_multirow, mode='w') as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerow(
         ['Collection', 'Study ID', 'Subject ID', 'Image ID', 'Analysis type', 'Execution ID', 'Creator', 'Date'])
@@ -194,5 +197,7 @@ with open(out_dir + 'annotations_' + name + '_' + stamp + '.csv', mode='w') as c
                 # break  # THIS BREAK IS FOR DEBUG PURPOSES. FOR ENTIRE REPORT, COMMENT.
         else:
             hasNext = False
+
+transform_to_single_row(out_dir + file_name_multirow,out_dir + file_name_singlerow)
 
 exit(0)
