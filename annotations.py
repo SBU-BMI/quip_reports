@@ -159,8 +159,8 @@ if len(collection_name) == 0:
 images_url = '/listofimages/' + str(collection_id) + '?_format=json'
 name = re.sub('\W+', '', collection_name).lower()
 
-file_name_multirow = 'annotations_' + name + '_' + stamp + '.csv';
-file_name_singlerow = 'single_row_' + file_name_multirow;
+file_name_multirow = 'annotations_' + name + '_' + stamp + '.csv'
+file_name_singlerow = 'single_row_' + file_name_multirow
 with open(out_dir + file_name_multirow, mode='w') as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerow(
