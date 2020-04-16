@@ -80,6 +80,8 @@ def transform_to_single_row(inp_file, out_file):
         out_table.at[index, 'Study ID'] = row['Study ID']
         out_table.at[index, 'Subject ID'] = row['Subject ID']
         out_table.at[index, 'Image ID'] = row['Image ID']
+        for i in expanded_columns:
+            out_table.at[index, i] = 'None'
         type_count = {}
         for i in analysis_type_columns:
             type_count[i] = 0
