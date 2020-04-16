@@ -1,3 +1,5 @@
 requests
 geojson
 pymongo
+pandas
+numpy
