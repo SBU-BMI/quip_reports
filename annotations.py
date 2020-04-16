@@ -4,9 +4,9 @@ import re
 import sys
 import time
 
+from combine_data import *
 from mongoapi import *
 from pathdbapi import *
-from combine_data import *
 
 usr_details = {}
 
@@ -198,6 +198,6 @@ with open(out_dir + file_name_multirow, mode='w') as csv_file:
         else:
             hasNext = False
 
-transform_to_single_row(out_dir + file_name_multirow,out_dir + file_name_singlerow)
+transform_to_single_row(out_dir + file_name_multirow, out_dir + file_name_singlerow)
 
 exit(0)
