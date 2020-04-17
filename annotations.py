@@ -138,7 +138,6 @@ host = "http://quip-pathdb"
 api = MyApi(host, username, password)
 
 hasNext = True
-count = 0
 collection_id = 0
 collection_name = ''
 out_dir = '/data/reports/'
@@ -166,20 +165,12 @@ with open(out_dir + file_name_multirow, mode='w') as csv_file:
     csv_writer.writerow(
         ['Collection', 'Study ID', 'Subject ID', 'Image ID', 'Analysis type', 'Execution ID', 'Creator', 'Date'])
 
-    first_nid = 0
+    count = 0
     while hasNext:
+        url = images_url + '&page=' + str(count)
         count += 1
-        url = images_url
-        if count > 1:
-            url += '&page=' + str(count)
         response = api.get_data(url)
         if len(response) > 0:
-            if count == 1:
-                first_nid = response[0]['nid'][0]['value']
-            if count > 1:
-                nid = response[0]['nid'][0]['value']
-                if nid == first_nid:
-                    break
             for r in response:
                 img = {
                     "nid": r['nid'][0]['value'],
@@ -187,14 +178,13 @@ with open(out_dir + file_name_multirow, mode='w') as csv_file:
                     "studyid": r['studyid'][0]['value'],
                     "subjectid": r['clinicaltrialsubjectid'][0]['value']
                 }
+                # print(img['imageid'])
                 nothing_row = [collection_name, img['studyid'], img['subjectid'], img['imageid'], "placeholder", 'None']
 
                 mark(csv_writer, img, nothing_row, "Segmentation")
                 mark(csv_writer, img, nothing_row, "Human")
                 heatmap(csv_writer, img, nothing_row)
                 featuremap(csv_writer, img, nothing_row)
-
-                # break  # THIS BREAK IS FOR DEBUG PURPOSES. FOR ENTIRE REPORT, COMMENT.
         else:
             hasNext = False
 
