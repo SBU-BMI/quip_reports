@@ -23,7 +23,7 @@ host = "http://quip-pathdb"
 api = MyApi(host, username, password)
 
 hasNext = True
-count = 0
+
 collection_id = 0
 collection_name = ''
 out_dir = '/data/reports/'
@@ -47,22 +47,12 @@ else:
 with open(out_dir + 'images_' + name + '_' + stamp + '.csv', mode='w') as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerow(['Collection', 'Study ID', 'Subject ID', 'Image ID', 'Date'])
-    first_nid = 0
+    count = 0
     while hasNext:
+        url = images_url + '&page=' + str(count)
         count += 1
-
-        url = images_url
-        if count > 1:
-            url += '&page=' + str(count)
-
         response = api.get_data(url)
         if len(response) > 0:
-            if count == 1:
-                first_nid = response[0]['nid'][0]['value']
-            if count > 1:
-                nid = response[0]['nid'][0]['value']
-                if nid == first_nid:
-                    break
             for r in response:
                 datetime_str = r['created'][0]['value'].replace("T", " ")
                 datetime_str = datetime_str.replace("+00:00", "")
